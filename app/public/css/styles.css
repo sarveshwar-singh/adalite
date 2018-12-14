@@ -998,17 +998,6 @@ td {
 }
 
 /*LANDING*/
-.intro-wrapper {
-  margin: auto;
-  margin-top: 1.5rem;
-  padding: 0 1em;
-}
-.intro-header {
-  font-size: 2.3rem;
-  font-weight: 600;
-  margin: 0 4rem 1rem;
-  text-align: center;
-}
 .intro-input-row {
   display: flex;
   justify-content: center;
@@ -1514,8 +1503,11 @@ td {
 }
 
 .auth-section {
-  animation: fade-in 1.5s;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 .export-wallet-button {
   margin: auto;
@@ -1560,4 +1552,144 @@ td {
 
 .flex-align {
   display: flex;
+}
+
+.card {
+  box-shadow: 1px 3px 8px 3px #ccc;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card .card-tabs {
+  display: flex;
+}
+
+.card .card-tabs .card-tab {
+  flex: 1;
+  display: flex;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: #fafafa;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
+
+.card .card-tabs .card-tab:first-of-type {
+  border-left: none;
+}
+
+.card .card-tabs .card-tab:last-of-type {
+  border-right: none;
+}
+
+.card .card-tabs .card-tab.active {
+  background: white;
+  border-color: #ccc;
+  border-bottom: none;
+}
+
+.card .card-body {
+  padding: 50px;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+}
+
+.sign-in-options {
+  display: flex;
+}
+
+.sign-in-option {
+  border: 1px solid #ccc;
+  padding: 40px;
+  height: 210px;
+}
+
+.sign-in-option:nth-of-type(2) {
+  border-left: none;
+  border-right: none;
+}
+
+.sign-in-option:hover {
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.sign-in-option h4,
+.sign-in-option div {
+  text-align: center;
+}
+
+.sign-in-option h4 {
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: inline;
+  position: relative;
+}
+
+.sign-in-option:hover h4::after {
+  content: '';
+  border-bottom: 2px solid black;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+}
+
+.choose-sign-in-option {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+}
+
+.choose-sign-in-option h2 {
+  border: none;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.intro {
+  margin: 100px auto;
+  width: var(--width);
+  display: flex;
+}
+
+.sign-in-option-wrapper {
+  flex: 3;
+}
+
+.sign-in-option-description {
+  margin-left: 70px;
+  flex: 1;
+  padding-top: 80px;
+}
+
+.mnemonic-input {
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding-left: 15px;
+  width: 100%;
+  margin: 15px 0;
+}
+
+.mnemonic-input-label {
+  width: 100%;
+  padding-left: 10px;
+}
+
+.unlock-wallet-with-mnemonic {
+  width: 100%;
 }

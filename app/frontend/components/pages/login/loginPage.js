@@ -10,6 +10,49 @@ const HardwareAuth = require('./hardwareAuth')
 const DemoWalletWarningDialog = require('./demoWalletWarningDialog')
 const GenerateMnemonicDialog = require('./generateMnemonicDialog')
 const LogoutNotification = require('./logoutNotification')
+const ChooseSignInOption = require('./chooseSignInOption')
+const Card = require('../../common/card')
+
+const MnemonicDescription = () =>
+  h(
+    'div',
+    {},
+    'Encrypted key file is not the most secure access method. For enhanced security, we recommend you to use a ',
+    h('a', {}, 'hardware walet'),
+    '.',
+  )
+
+const UseHardwareWalletDescription = (mainText) =>
+  h(
+    'div',
+    {},
+    h('div', {}, mainText),
+    h(
+      'a',
+      {
+        href: 'https://github.com/vacuumlabs/adalite/wiki/AdaLite-FAQ#hardware-wallets',
+      },
+      'What is a Hardware Wallet',
+    ),
+    h('a', {href: 'https://wiki.trezor.io/Cardano_(ADA)'}, 'How to use Trezor T with AdaLite'),
+    h(
+      'div',
+      {},
+      'If you want to purchase Trezor, please consider supporting us by using our ',
+      h('a', {href: 'https://shop.trezor.io/?offer_id=10&aff_id=1071'}, 'affiliate link'),
+      '.',
+    ),
+  )
+
+const NoAuthSelectedDescription = () =>
+  UseHardwareWalletDescription(
+    'AdaLite supports 3 means of accessing your wallet. For enhanced security, we recommend you to use a hardware wallet.',
+  )
+
+const HardwareWalletDescription = () =>
+  UseHardwareWalletDescription(
+    'Hardware Wallet is the recommended method to access your wallet. Hardware wallets provide the best security level for storing your cryptocurrencies.',
+  )
 
 class LoginPage extends Component {
   render({
@@ -23,46 +66,68 @@ class LoginPage extends Component {
     displayAboutOverlay,
     showGenerateMnemonicDialog,
   }) {
-    const authOption = (name, text) =>
-      h(
-        'li',
-        {
-          class: authMethod === name && 'selected',
-          onClick: () => setAuthMethod(name),
-        },
-        text
-      )
     return h(
       'div',
-      {class: 'intro-wrapper'},
+      {class: 'intro'},
       h(
         'div',
-        undefined,
-        h('h2', {class: 'intro-header'}, 'Access Cardano Wallet via'),
-        h(
-          'ul',
-          {class: 'tab-row'},
-          authOption('mnemonic', 'Mnemonic'),
-          authOption('trezor', 'Hardware wallet'),
-          authOption('file', 'Key file')
-        ),
-        walletLoadingError &&
-          h(
-            'p',
-            {class: 'alert error'},
-            getTranslation(walletLoadingError.code, walletLoadingError.params)
-          ),
-        authMethod === 'mnemonic' && h(MnemonicAuth),
-        authMethod === 'trezor' && h(HardwareAuth, {enableTrezor, loadWallet}),
-        authMethod === 'file' && h(KeyFileAuth)
+        {class: 'sign-in-option-wrapper'},
+        !authMethod && h(ChooseSignInOption),
+        !!authMethod &&
+          h(Card, {
+            activeTab: authMethod,
+            onTabChange: setAuthMethod,
+            tabs: [
+              {key: 'mnemonic', name: 'Mnemonic', content: h(MnemonicAuth)},
+              {
+                key: 'trezor',
+                name: 'Hardware Wallet',
+                content: h(HardwareAuth, {enableTrezor, loadWallet}),
+              },
+              {key: 'file', name: 'Key file', content: h(KeyFileAuth)},
+            ],
+          }),
+        displayAboutOverlay && h(AboutOverlay),
+        showDemoWalletWarningDialog && h(DemoWalletWarningDialog),
+        logoutNotificationOpen && h(LogoutNotification),
       ),
-      displayAboutOverlay && h(AboutOverlay),
-      showDemoWalletWarningDialog && h(DemoWalletWarningDialog),
-      showGenerateMnemonicDialog && h(GenerateMnemonicDialog),
-      logoutNotificationOpen && h(LogoutNotification)
+      h(
+        'div',
+        {class: 'sign-in-option-description'},
+        !authMethod && h(NoAuthSelectedDescription, {}),
+        authMethod === 'mnemonic' && h(MnemonicDescription, {}),
+        authMethod === 'trezor' && h(HardwareWalletDescription, {}),
+        authMethod === 'file' && h(MnemonicDescription, {}),
+      ),
     )
   }
 }
+
+// class LoginPage extends Component {
+//   render({
+//     loadWallet,
+//     walletLoadingError,
+//     authMethod,
+//     setAuthMethod,
+//     enableTrezor,
+//     showDemoWalletWarningDialog,
+//     logoutNotificationOpen,
+//     displayAboutOverlay
+//   }) {
+//
+//         walletLoadingError &&
+//           h(
+//             'p',
+//             {class: 'alert error'},
+//             getTranslation(walletLoadingError.code, walletLoadingError.params)
+//           ),
+//       ),
+//       displayAboutOverlay && h(AboutOverlay),
+//       showDemoWalletWarningDialog && h(DemoWalletWarningDialog),
+//       logoutNotificationOpen && h(LogoutNotification)
+//     )
+//   }
+// }
 
 module.exports = connect(
   (state) => ({
@@ -74,5 +139,5 @@ module.exports = connect(
     displayAboutOverlay: state.displayAboutOverlay,
     showGenerateMnemonicDialog: state.showGenerateMnemonicDialog,
   }),
-  actions
+  actions,
 )(LoginPage)

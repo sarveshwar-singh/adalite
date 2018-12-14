@@ -31,55 +31,48 @@ class LoadByMenmonicSectionClass extends Component {
       {class: 'auth-section'},
       h(
         'div',
-        {class: 'centered-row margin-bottom'},
-        'Enter the 12-word wallet mnemonic or 27-word Daedalus paper wallet mnemonic'
+        {class: 'mnemonic-input-label'},
+        'Enter the 12-word wallet mnemonic or 27-word Daedalus paper wallet mnemonic',
       ),
       mnemonicValidationError &&
         showMnemonicValidationError &&
         h('p', {class: 'alert error'}, getTranslation(mnemonicValidationError.code)),
+      h('input', {
+        type: 'text',
+        class: 'mnemonic-input',
+        id: 'mnemonic-submitted',
+        name: 'mnemonic-submitted',
+        placeholder: 'Enter wallet mnemonic',
+        value: mnemonic,
+        onInput: updateMnemonic,
+        onBlur: checkForMnemonicValidationError,
+        autocomplete: 'nope',
+        ref: (element) => {
+          this.mnemonicField = element
+        },
+        onKeyDown: (e) => e.key === 'Enter' && this.goBtn.click(),
+      }),
       h(
         'div',
-        {class: 'intro-input-row'},
-        h('input', {
-          type: 'text',
-          class: 'styled-input-nodiv styled-unlock-input',
-          id: 'mnemonic-submitted',
-          name: 'mnemonic-submitted',
-          placeholder: 'Enter wallet mnemonic',
-          value: mnemonic,
-          onInput: updateMnemonic,
-          onBlur: checkForMnemonicValidationError,
-          autocomplete: 'nope',
-          ref: (element) => {
-            this.mnemonicField = element
-          },
-          onKeyDown: (e) => e.key === 'Enter' && this.goBtn.click(),
-        }),
+        {class: 'unlock-wallet-with-mnemonic'},
         h(
-          'span',
-          undefined,
-          h(
-            'button',
-            {
-              class: `intro-button rounded-button ${
-                mnemonic && !mnemonicValidationError ? 'pulse' : ''
-              }`,
-              disabled: !mnemonic || mnemonicValidationError,
-              onClick: () => loadWallet({cryptoProvider: 'mnemonic', secret: mnemonic}),
-              onKeyDown: (e) => {
-                e.key === 'Enter' && e.target.click()
-                if (e.key === 'Tab') {
-                  this.mnemonicField.focus()
-                  e.preventDefault()
-                }
-              },
-              ref: (element) => {
-                this.goBtn = element
-              },
+          'button',
+          {
+            disabled: !mnemonic || mnemonicValidationError,
+            onClick: () => loadWallet({cryptoProvider: 'mnemonic', secret: mnemonic}),
+            onKeyDown: (e) => {
+              e.key === 'Enter' && e.target.click()
+              if (e.key === 'Tab') {
+                this.mnemonicField.focus()
+                e.preventDefault()
+              }
             },
-            'Go'
-          )
-        )
+            ref: (element) => {
+              this.goBtn = element
+            },
+          },
+          'Unlock',
+        ),
       ),
       h(
         'div',
@@ -94,9 +87,9 @@ class LoadByMenmonicSectionClass extends Component {
             */
             onMouseDown: (e) => isLeftClick(e, loadDemoWallet),
           },
-          'Try demo wallet'
-        )
-      )
+          'Try demo wallet',
+        ),
+      ),
     )
   }
 }
@@ -109,5 +102,5 @@ module.exports = connect(
     mnemonicValidationError: state.mnemonicValidationError,
     showMnemonicValidationError: state.showMnemonicValidationError,
   }),
-  actions
+  actions,
 )(LoadByMenmonicSectionClass)
