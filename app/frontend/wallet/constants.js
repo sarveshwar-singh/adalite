@@ -18,4 +18,12 @@ module.exports = {
       protocolMagic: 1097911063,
     },
   },
+
+  CRYPTO_PROVIDER: {
+    LEDGER: 'LEDGER',
+    TREZOR: 'TREZOR',
+    WALLET_SECRET: 'WALLET_SECRET',
+  },
+
+  U2F_EXCHANGE_TIMEOUT: 15 * 60000,
 }

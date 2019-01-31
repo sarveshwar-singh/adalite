@@ -8,8 +8,14 @@ const AddressManager = require('./address-manager')
 const BlockchainExplorer = require('./blockchain-explorer')
 const CardanoWalletSecretCryptoProvider = require('./cardano-wallet-secret-crypto-provider')
 const CardanoTrezorCryptoProvider = require('./cardano-trezor-crypto-provider')
+const CardanoLedgerCryptoProvider = require('./cardano-ledger-crypto-provider')
 const PseudoRandom = require('./helpers/PseudoRandom')
-const {HARDENED_THRESHOLD, MAX_INT32, TX_WITNESS_SIZE_BYTES} = require('./constants')
+const {
+  HARDENED_THRESHOLD,
+  MAX_INT32,
+  TX_WITNESS_SIZE_BYTES,
+  CRYPTO_PROVIDER,
+} = require('./constants')
 const derivationSchemes = require('./derivation-schemes.js')
 const shuffleArray = require('./helpers/shuffleArray')
 const {parseTx} = require('./helpers/cbor-parsers')
@@ -40,10 +46,12 @@ const CardanoWallet = async (options) => {
   const blockchainExplorer = BlockchainExplorer(config, state)
 
   let cryptoProvider = null
-  if (options.cryptoProvider === 'trezor') {
+  if (options.cryptoProvider === CRYPTO_PROVIDER.TREZOR) {
     await alertIfUnsupportedTrezorFwVersion()
     cryptoProvider = CardanoTrezorCryptoProvider(config, state)
-  } else if (options.cryptoProvider === 'mnemonic') {
+  } else if (options.cryptoProvider === CRYPTO_PROVIDER.LEDGER) {
+    cryptoProvider = await CardanoLedgerCryptoProvider(config, state)
+  } else if (options.cryptoProvider === CRYPTO_PROVIDER.WALLET_SECRET) {
     const {walletSecret, derivationScheme} = await mnemonicOrHdNodeStringToWalletSecret(
       mnemonicOrHdNodeString,
       options.derivationScheme
@@ -83,6 +91,9 @@ const CardanoWallet = async (options) => {
 
   // fetch unspent outputs list asynchronously
   getUnspentTxOutputs()
+
+  const isHwWallet = () => cryptoProvider.isHwWallet()
+  const getHwWalletName = () => (isHwWallet ? cryptoProvider.getHwWalletName() : undefined)
 
   async function submitTx(signedTx) {
     const {txBody, txHash} = signedTx
@@ -379,6 +390,8 @@ const CardanoWallet = async (options) => {
   }
 
   return {
+    isHwWallet,
+    getHwWalletName,
     getSecret,
     submitTx,
     prepareSignedTx,

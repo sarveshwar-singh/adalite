@@ -1,6 +1,5 @@
 const {generateMnemonic} = require('./wallet/mnemonic')
 const {ADALITE_CONFIG} = require('./config')
-const derivationSchemes = require('./wallet/derivation-schemes')
 const FileSaver = require('file-saver')
 const cbor = require('borc')
 const {
@@ -15,8 +14,8 @@ const getConversionRates = require('./helpers/getConversionRates')
 const sleep = require('./helpers/sleep')
 const {ADA_DONATION_ADDRESS} = require('./wallet/constants')
 const NamedError = require('./helpers/NamedError')
-const Cardano = require('./wallet/cardano-wallet')
 const KeypassJson = require('./wallet/keypass-json')
+const CryptoProviderFactory = require('./wallet/crypto-provider-factory')
 
 let wallet = null
 
@@ -66,33 +65,33 @@ module.exports = ({setState, getState}) => {
 
   const loadWallet = async (state, {cryptoProvider, secret}) => {
     loadingAction(state, 'Loading wallet data...', {walletLoadingError: undefined})
-    switch (cryptoProvider) {
-      case 'trezor':
-        wallet = await Cardano.CardanoWallet({
-          cryptoProvider: 'trezor',
-          config: ADALITE_CONFIG,
-          network: 'mainnet',
-          derivationScheme: derivationSchemes.v2,
-        })
-        break
-      case 'mnemonic':
-        secret = secret.trim()
-        wallet = await Cardano.CardanoWallet({
-          cryptoProvider: 'mnemonic',
-          mnemonicOrHdNodeString: secret,
-          config: ADALITE_CONFIG,
-          network: 'mainnet',
-          derivationScheme: derivationSchemes.v1,
-        })
-        break
-      default:
-        return setState({
-          loading: false,
-          walletLoadingError: {
-            code: 'UnknownCryptoProvider',
-            params: {cryptoProvider},
-          },
-        })
+    try {
+      wallet = await CryptoProviderFactory.getWallet(cryptoProvider, secret)
+    } catch (e) {
+      debugLog(e)
+      let code
+      const params = {}
+      switch (e.name) {
+        case 'TransportError':
+          params.message = e.message
+          code = 'WalletInitializationError'
+          break
+        case 'UnknownCryptoProviderError':
+          params.cryptoProvider = e.message
+          code = 'UnknownCryptoProviderError'
+          break
+        default:
+          params.message = undefined
+          code = 'WalletInitializationError'
+      }
+      setState({
+        walletLoadingError: {
+          code,
+          params,
+        },
+        loading: false,
+      })
+      return false
     }
     try {
       const walletIsLoaded = true
@@ -103,7 +102,8 @@ module.exports = ({setState, getState}) => {
       const sendAmount = {fieldValue: ''}
       const sendAddress = {fieldValue: ''}
       const sendResponse = ''
-      const usingTrezor = cryptoProvider === 'trezor'
+      const usingHwWallet = wallet.isHwWallet()
+      const hwWalletName = usingHwWallet ? wallet.getHwWalletName() : undefined
       const isDemoWallet = secret === ADALITE_CONFIG.ADALITE_DEMO_WALLET_MNEMONIC
       setState({
         walletIsLoaded,
@@ -115,7 +115,8 @@ module.exports = ({setState, getState}) => {
         transactionHistory,
         loading: false,
         mnemonic: '',
-        usingTrezor,
+        usingHwWallet,
+        hwWalletName,
         isDemoWallet,
         showDemoWalletWarningDialog: isDemoWallet,
         showGenerateMnemonicDialog: false,
@@ -200,20 +201,30 @@ module.exports = ({setState, getState}) => {
 
   const verifyAddress = async (address) => {
     const state = getState()
-    if (state.usingTrezor && state.showAddressDetail) {
+    if (state.usingHwWallet && state.showAddressDetail) {
       try {
+        setState({waitingForHwWallet: true})
         await wallet.verifyAddress(state.showAddressDetail.address)
-        setState({showAddressVerification: false})
+        setState({
+          showAddressVerification: false,
+          waitingForHwWallet: false,
+        })
       } catch (e) {
         setState({
           showAddressDetail: undefined,
+          waitingForHwWallet: false,
         })
       }
     }
   }
 
   const openAddressDetail = (state, {address, bip32path}) => {
-    const showAddressVerification = state.usingTrezor && bip32path //because we don't want to
+    /*
+    * because we don't want to trigger trezor address
+    * verification for the  donation address
+    */
+    const showAddressVerification = state.usingHwWallet && bip32path
+
     // trigger trezor address verification for the  donation address
     setState({
       showAddressDetail: {address, bip32path},
@@ -414,8 +425,8 @@ module.exports = ({setState, getState}) => {
   }
 
   const submitTransaction = async (state) => {
-    if (state.usingTrezor) {
-      setState({waitingForTrezor: true})
+    if (state.usingHwWallet) {
+      setState({waitingForHwWallet: true})
     } else {
       loadingAction(state, 'Submitting transaction...')
     }
@@ -426,8 +437,8 @@ module.exports = ({setState, getState}) => {
       const address = state.sendAddress.fieldValue
       const amount = state.sendAmount.coins
       const signedTx = await wallet.prepareSignedTx(address, amount)
-      if (state.usingTrezor) {
-        setState({waitingForTrezor: false})
+      if (state.usingHwWallet) {
+        setState({waitingForHwWallet: false})
         loadingAction(state, 'Submitting transaction...')
       }
       const txSubmitResult = await wallet.submitTx(signedTx)
@@ -451,7 +462,7 @@ module.exports = ({setState, getState}) => {
     } finally {
       resetSendForm(state)
       setState({
-        waitingForTrezor: false,
+        waitingForHwWallet: false,
         sendResponse,
       })
     }
