@@ -3279,7 +3279,7 @@ lcid@^1.0.0:
 
 "ledgerhq@https://github.com/vacuumlabs/ledgerjs-cardano":
   version "0.0.0"
-  resolved "https://github.com/vacuumlabs/ledgerjs-cardano#b2d856f60509823b9dd326c6e9a772448df3a4cc"
+  resolved "https://github.com/vacuumlabs/ledgerjs-cardano#c01ced26199fd7ea3bc789aeec35379ce9fa69ac"
   dependencies:
     base-x "^3.0.5"
 
