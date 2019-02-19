@@ -25,5 +25,10 @@ module.exports = {
     WALLET_SECRET: 'WALLET_SECRET',
   },
 
-  U2F_EXCHANGE_TIMEOUT: 15 * 60000,
+  /*
+  * U2F timeout higher than 30s causes unpredictable behavior of Ledger device
+  * since the communication seems to timeout at a deeper level, not
+  * influenced by this value.
+  */
+  U2F_EXCHANGE_TIMEOUT: 30000,
 }
