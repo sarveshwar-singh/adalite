@@ -151,7 +151,7 @@ const NavbarAuth = connect(
             h(
               'a',
               {
-                href: 'https://github.com/vacuumlabs/adalite/wiki/AdaLite-FAQ',
+                href: 'https://github.com/vacuumlabs/adalite/wiki',
                 target: '_blank',
               },
               'Help'
