@@ -133,14 +133,18 @@ module.exports = ({setState, getState}) => {
       }
     } catch (e) {
       debugLog(e)
+      let message
+      if (e.name === 'NetworkError') {
+        message = 'failed to fetch data from blockchain explorer'
+      } else if (e.name === 'TransportError') {
+        message = e.message
+      }
+
       setState({
         walletLoadingError: {
           code: 'WalletInitializationError',
           params: {
-            message:
-              e.name === 'NetworkError'
-                ? 'failed to fetch data from blockchain explorer'
-                : undefined,
+            message,
           },
         },
         loading: false,
@@ -458,6 +462,7 @@ module.exports = ({setState, getState}) => {
       sendResponse = {
         success: false,
         error: e.name,
+        message: e.message,
       }
     } finally {
       resetSendForm(state)

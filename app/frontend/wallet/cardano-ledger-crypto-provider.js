@@ -23,13 +23,9 @@ const CardanoLedgerCryptoProvider = async (ADALITE_CONFIG, walletState) => {
   const getHwWalletName = () => 'Ledger'
 
   const deriveXpub = CachedDeriveXpubFactory(state.derivationScheme, async (absDerivationPath) => {
-    try {
-      const response = await ledger.getExtendedPublicKey(absDerivationPath)
-      const xpubHex = response.publicKeyHex + response.chainCodeHex
-      return Buffer.from(xpubHex, 'hex')
-    } catch (err) {
-      throw new Error('Public key retrieval from Ledger failed')
-    }
+    const response = await ledger.getExtendedPublicKey(absDerivationPath)
+    const xpubHex = response.publicKeyHex + response.chainCodeHex
+    return Buffer.from(xpubHex, 'hex')
   })
 
   function deriveHdNode(childIndex) {
