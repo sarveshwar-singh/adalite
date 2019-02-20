@@ -10,19 +10,34 @@
     core-js "^2.5.7"
     regenerator-runtime "^0.12.0"
 
-"@ledgerhq/hw-transport-u2f@^4.7.3":
-  version "4.32.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.32.0.tgz#847969744aafecfa6c16bc481fe6615814ee2385"
-  integrity sha512-xzY+Q7ObVVv/V/wxvp1eEbDhFf+LFnavQGvqw8EZkCEmkX4iKh2w7AH+B8k1XWS+Mpa3CiG3TVQQE85mf+6jQg==
+"@ledgerhq/devices@^4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-4.39.0.tgz#47d23a1a58004da162e007e0c456ab2119038c7d"
+  integrity sha512-2Jd7CVvMJDZxxaSpQpfOMeGWf7M0f6nZqZQWfjsUDQHw45Kunck101pXr6U/5UejJiLl/fhyLqvaXz0X0cs+1A==
   dependencies:
-    "@ledgerhq/hw-transport" "^4.32.0"
-    u2f-api "0.2.7"
+    "@ledgerhq/errors" "^4.39.0"
 
-"@ledgerhq/hw-transport@^4.32.0":
-  version "4.32.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.32.0.tgz#592b9dc51459cb1cd31ce9444cf943f627bc4beb"
-  integrity sha512-Wgsk9UHC4RShqYoDeIEeKgHZOvNCtB0WWIG0xqlVPzS+IcKDkIxtXQw7hTA7GQSuDuGeauVtlbTQ5yat6+2/BA==
+"@ledgerhq/errors@^4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.39.0.tgz#10b9889f78df94ce36a4b34d9a3a45aac77be0e9"
+  integrity sha512-kBr2rnoYDACRCxTLtEufE4oCvYj6vx2oFWVVjwskBxYsF5LC9R8Mbg5C4GgvDweiWW4Io8HA9p9jCsOfdCDygg==
+
+"@ledgerhq/hw-transport-webusb@^4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-4.39.0.tgz#7fcfb9d1485a06b2dd13fdfd2adcda391ac08c7b"
+  integrity sha512-244EPeob6MkjXr6pEUU+lwr5b1i+nclpYC2byNTxRaqDj66wazK9nndV0y2pczazSUtCf+uDgMAen5hVfTshWQ==
   dependencies:
+    "@ledgerhq/devices" "^4.39.0"
+    "@ledgerhq/errors" "^4.39.0"
+    "@ledgerhq/hw-transport" "^4.39.0"
+
+"@ledgerhq/hw-transport@^4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.39.0.tgz#602c6ea3fef56d1df205274ea742b4cf85613f6c"
+  integrity sha512-XkVAy2SFRDdE3qQGGVxB7RQdsdIx1fcoRNReU7NQXK59fYqxue+ZoiGtynEoHq9RKMg8EBG2kBXSVEh1iPdOlA==
+  dependencies:
+    "@ledgerhq/devices" "^4.39.0"
+    "@ledgerhq/errors" "^4.39.0"
     events "^3.0.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -5266,11 +5281,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-u2f-api@0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-0.2.7.tgz#17bf196b242f6bf72353d9858e6a7566cc192720"
-  integrity sha512-fqLNg8vpvLOD5J/z4B6wpPg4Lvowz1nJ9xdHcCzdUPKcFE/qNCceV2gNZxSJd5vhAZemHr/K/hbzVA0zxB5mkg==
 
 uglify-es@^3.3.4:
   version "3.3.9"

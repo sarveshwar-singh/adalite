@@ -5,6 +5,8 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
   const TrezorAffiliateLink = (title) =>
     h('a', {href: 'https://shop.trezor.io/?offer_id=10&aff_id=1071', target: 'blank'}, title)
 
+  const isWebusbSupported = navigator.usb !== undefined
+
   return h(
     'div',
     {class: 'auth-section'},
@@ -40,6 +42,7 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
           'button',
           {
             onClick: () => loadWallet({cryptoProvider: CRYPTO_PROVIDER.LEDGER}),
+            disabled: !isWebusbSupported,
           },
           h(
             'div',

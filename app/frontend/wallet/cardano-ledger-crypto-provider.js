@@ -1,15 +1,12 @@
-const TransportU2F = require('@ledgerhq/hw-transport-u2f').default // for browser
+const TransportWebusb = require('@ledgerhq/hw-transport-webusb').default
 const Ledger = require('ledgerhq/hw-app-ada').default // temporary hack, should be @ledgerhq
 const CachedDeriveXpubFactory = require('./helpers/CachedDeriveXpubFactory')
 const cbor = require('borc')
 const {TxWitness, SignedTransactionStructured} = require('./transaction')
-const {U2F_EXCHANGE_TIMEOUT} = require('./constants')
 
 const CardanoLedgerCryptoProvider = async (ADALITE_CONFIG, walletState) => {
-  const transport = await TransportU2F.create()
-  transport.setExchangeTimeout(U2F_EXCHANGE_TIMEOUT)
+  const transport = await TransportWebusb.create()
   const ledger = new Ledger(transport)
-
   const state = Object.assign(walletState, {
     rootHdPassphrase: null,
     derivedAddresses: {},
