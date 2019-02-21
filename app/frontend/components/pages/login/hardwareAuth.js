@@ -5,6 +5,9 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
   const TrezorAffiliateLink = (title) =>
     h('a', {href: 'https://shop.trezor.io/?offer_id=10&aff_id=1071', target: 'blank'}, title)
 
+  const LedgerAffiliateLink = (title) =>
+    h('a', {href: 'https://www.ledger.com/?r=8410116f31f3', target: 'blank'}, title)
+
   const isWebusbSupported = navigator.usb !== undefined
 
   return h(
@@ -18,11 +21,7 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
     h(
       'div',
       undefined,
-      h(
-        'div',
-        {class: 'margin-top'},
-        'AdaLite supports Trezor model T (firmware version >= 2.0.8).'
-      ),
+      h('div', {class: 'margin-top'}, 'AdaLite supports Trezor model T and Ledger Nano S.'),
       h(
         'div',
         {class: 'centered-row margin-top'},
@@ -55,9 +54,11 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
       h(
         'div',
         {class: 'margin-top'},
-        'You can support us by purchasing Trezor using our affiliate ',
-        TrezorAffiliateLink('link'),
-        '.'
+        'You can support us by purchasing ',
+        TrezorAffiliateLink('Trezor'),
+        ' or ',
+        LedgerAffiliateLink('Ledger'),
+        ' using our affiliate links.'
       )
     )
   )
