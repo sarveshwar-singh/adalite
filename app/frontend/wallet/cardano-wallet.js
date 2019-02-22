@@ -95,7 +95,6 @@ const CardanoWallet = async (options) => {
   }
 
   async function prepareSignedTx(address, coins) {
-    console.warn('PREPARE_SIGNED')
     const txAux = await prepareTxAux(address, coins).catch((e) => {
       debugLog(e)
       throw NamedError('TransactionCorrupted')
@@ -104,13 +103,9 @@ const CardanoWallet = async (options) => {
     const rawInputTxs = await Promise.all(
       txAux.inputs.map(({txHash}) => blockchainExplorer.fetchTxRaw(txHash))
     )
-    console.log('LLLLLL')
     const signedTx = await cryptoProvider
       .signTx(txAux, rawInputTxs, getAddressToAbsPathMapper())
       .catch((e) => {
-        console.log('IIIIII')
-        console.log(e)
-        console.log('JJJJJJJJJ')
         debugLog(e)
         throw NamedError('TransactionRejected')
       })
