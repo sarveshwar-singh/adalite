@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "@ledgerhq/hw-transport-u2f": "^4.39.0",
     "@ledgerhq/hw-transport-webusb": "^4.39.0",
     "bip39-light": "^1.0.7",
     "borc": "^2.1.0",

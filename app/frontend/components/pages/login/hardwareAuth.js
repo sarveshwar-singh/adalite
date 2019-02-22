@@ -8,7 +8,8 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
   const LedgerAffiliateLink = (title) =>
     h('a', {href: 'https://www.ledger.com/?r=8410116f31f3', target: 'blank'}, title)
 
-  const isWebusbSupported = navigator.usb !== undefined
+  // it doesn't work on Firefox even if U2F is enabled
+  const isFirefox = navigator.userAgent.indexOf('Firefox') !== -1
 
   return h(
     'div',
@@ -41,7 +42,7 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
           'button',
           {
             onClick: () => loadWallet({cryptoProvider: CRYPTO_PROVIDER.LEDGER}),
-            disabled: !isWebusbSupported,
+            disabled: isFirefox,
           },
           h(
             'div',

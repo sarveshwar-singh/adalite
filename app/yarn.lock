@@ -22,6 +22,15 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.39.0.tgz#10b9889f78df94ce36a4b34d9a3a45aac77be0e9"
   integrity sha512-kBr2rnoYDACRCxTLtEufE4oCvYj6vx2oFWVVjwskBxYsF5LC9R8Mbg5C4GgvDweiWW4Io8HA9p9jCsOfdCDygg==
 
+"@ledgerhq/hw-transport-u2f@^4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-u2f/-/hw-transport-u2f-4.39.0.tgz#f91da2d8791d343db455991ceae55218182c00b6"
+  integrity sha512-nGvf409m2W5xIuUZklCnyf7ZrFGNCKhHgXwBAZAEk37qCvM7NueC25TgQKcphe88S/dbU/arC8Z3mpVoArLTGg==
+  dependencies:
+    "@ledgerhq/errors" "^4.39.0"
+    "@ledgerhq/hw-transport" "^4.39.0"
+    u2f-api "0.2.7"
+
 "@ledgerhq/hw-transport-webusb@^4.39.0":
   version "4.39.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-4.39.0.tgz#7fcfb9d1485a06b2dd13fdfd2adcda391ac08c7b"
@@ -5281,6 +5290,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+u2f-api@0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-0.2.7.tgz#17bf196b242f6bf72353d9858e6a7566cc192720"
+  integrity sha512-fqLNg8vpvLOD5J/z4B6wpPg4Lvowz1nJ9xdHcCzdUPKcFE/qNCceV2gNZxSJd5vhAZemHr/K/hbzVA0zxB5mkg==
 
 uglify-es@^3.3.4:
   version "3.3.9"
