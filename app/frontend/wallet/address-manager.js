@@ -48,6 +48,19 @@ const AddressManager = ({
     let addresses = []
     let childIndexBegin = derivationScheme.startAddressIndex
     let isGapBlock = false
+    console.log('AAA')
+    const xxx = await deriveAddressesBlock(
+      childIndexBegin,
+      childIndexBegin + Object.keys(state.deriveAddressMemo).length
+    )
+    try {
+      console.log(xxx, xxx.length)
+      if (xxx.length > 0) {
+        //await blockchainExplorer.getTxHistory(xxx)
+      }
+    } catch (e) {
+      console.log(e)
+    }
 
     while (!isGapBlock) {
       const currentAddressBlock = await deriveAddressesBlock(

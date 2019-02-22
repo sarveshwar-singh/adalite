@@ -3,21 +3,21 @@ const range = require('./helpers/range')
 const NamedError = require('../helpers/NamedError')
 const debugLog = require('../helpers/debugLog')
 const hashCode = require('../helpers/hashCode')
-const {GAP_LIMIT} = require('./constants')
 
 const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   const state = Object.assign(walletState, {
     addressInfos: {},
   })
+  const gapLimit = ADALITE_CONFIG.ADALITE_GAP_LIMIT
 
   async function getTxHistory(addresses) {
     const transactions = []
 
-    const chunks = range(0, Math.ceil(addresses.length / GAP_LIMIT))
+    const chunks = range(0, Math.ceil(addresses.length / gapLimit))
     const addressInfos = (await Promise.all(
       chunks.map(async (index) => {
-        const beginIndex = index * GAP_LIMIT
-        return await getAddressInfos(addresses.slice(beginIndex, beginIndex + GAP_LIMIT))
+        const beginIndex = index * gapLimit
+        return await getAddressInfos(addresses.slice(beginIndex, beginIndex + gapLimit))
       })
     )).reduce(
       (acc, elem) => {
@@ -73,7 +73,9 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function getAddressInfos(addresses) {
+    console.log('BBB')
     const hash = hashCode(JSON.stringify(addresses))
+    console.log('AAA')
     const addressInfos = state.addressInfos[hash]
     const maxAddressInfoAge = 15000
 
@@ -135,16 +137,16 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function fetchUnspentTxOutputs(addresses) {
-    const chunks = range(0, Math.ceil(addresses.length / GAP_LIMIT))
+    const chunks = range(0, Math.ceil(addresses.length / gapLimit))
 
     const url = `${ADALITE_CONFIG.ADALITE_BLOCKCHAIN_EXPLORER_URL}/api/bulk/addresses/utxo`
     const response = (await Promise.all(
       chunks.map(async (index) => {
-        const beginIndex = index * GAP_LIMIT
+        const beginIndex = index * gapLimit
         const response = await request(
           url,
           'POST',
-          JSON.stringify(addresses.slice(beginIndex, beginIndex + GAP_LIMIT)),
+          JSON.stringify(addresses.slice(beginIndex, beginIndex + gapLimit)),
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
