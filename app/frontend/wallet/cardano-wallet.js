@@ -12,7 +12,6 @@ const PseudoRandom = require('./helpers/PseudoRandom')
 const {HARDENED_THRESHOLD, MAX_INT32, TX_WITNESS_SIZE_BYTES} = require('./constants')
 const derivationSchemes = require('./derivation-schemes.js')
 const shuffleArray = require('./helpers/shuffleArray')
-const {parseTx} = require('./helpers/cbor-parsers')
 const CborIndefiniteLengthArray = require('./helpers/CborIndefiniteLengthArray')
 const NamedError = require('../helpers/NamedError')
 const mnemonicOrHdNodeStringToWalletSecret = require('./helpers/mnemonicOrHdNodeStringToWalletSecret')
@@ -95,7 +94,6 @@ const CardanoWallet = async (options) => {
   }
 
   async function prepareSignedTx(address, coins) {
-    console.warn('PREPARE_SIGNED')
     const txAux = await prepareTxAux(address, coins).catch((e) => {
       debugLog(e)
       throw NamedError('TransactionCorrupted')
@@ -104,13 +102,9 @@ const CardanoWallet = async (options) => {
     const rawInputTxs = await Promise.all(
       txAux.inputs.map(({txHash}) => blockchainExplorer.fetchTxRaw(txHash))
     )
-    console.log('LLLLLL')
     const signedTx = await cryptoProvider
       .signTx(txAux, rawInputTxs, getAddressToAbsPathMapper())
       .catch((e) => {
-        console.log('IIIIII')
-        console.log(e)
-        console.log('JJJJJJJJJ')
         debugLog(e)
         throw NamedError('TransactionRejected')
       })

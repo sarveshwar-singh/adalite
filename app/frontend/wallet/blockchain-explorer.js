@@ -58,12 +58,9 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function fetchTxRaw(txId) {
-    console.log('FETCH_TX_RAW')
     // eslint-disable-next-line no-undef
     const url = `${ADALITE_CONFIG.ADALITE_BLOCKCHAIN_EXPLORER_URL}/api/txs/raw/${txId}`
     const result = await request(url)
-    console.log(txId)
-    console.log(result.Right)
     return Buffer.from(result.Right, 'hex')
   }
 
@@ -138,15 +135,12 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function fetchUnspentTxOutputs(addresses) {
-    console.log('UTXO')
     const chunks = range(0, Math.ceil(addresses.length / GAP_LIMIT))
 
     const url = `${ADALITE_CONFIG.ADALITE_BLOCKCHAIN_EXPLORER_URL}/api/bulk/addresses/utxo`
     const response = (await Promise.all(
       chunks.map(async (index) => {
         const beginIndex = index * GAP_LIMIT
-        console.log('CHUNK')
-        console.log(JSON.stringify(addresses.slice(beginIndex, beginIndex + GAP_LIMIT)))
         const response = await request(
           url,
           'POST',
@@ -178,8 +172,6 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function fetchBulkAddressInfo(addresses) {
-    console.log('FETCH')
-    console.log(JSON.stringify(addresses))
     const url = `${ADALITE_CONFIG.ADALITE_BLOCKCHAIN_EXPLORER_URL}/api/bulk/addresses/summary`
     const result = await request(url, 'POST', JSON.stringify(addresses), {
       'Accept': 'application/json',
