@@ -72,7 +72,7 @@ const CardanoLedgerCryptoProvider = async (ADALITE_CONFIG, walletState) => {
 
   async function prepareWitness(witness) {
     const extendedPublicKey = await deriveXpub(witness.path)
-    return TxWitness(extendedPublicKey, Buffer.from(witness.witnessHex, 'hex'))
+    return TxWitness(extendedPublicKey, Buffer.from(witness.witnessSignatureHex, 'hex'))
   }
 
   function prepareBody(unsignedTx, txWitnesses) {
@@ -87,7 +87,6 @@ const CardanoLedgerCryptoProvider = async (ADALITE_CONFIG, walletState) => {
         prepareInput(input, addressToAbsPathMapper, transactions[i])
       )
     )
-
     const outputs = await Promise.all(
       unsignedTx.outputs.map((output) => prepareOutput(output, addressToAbsPathMapper))
     )
