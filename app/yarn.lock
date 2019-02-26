@@ -31,15 +31,6 @@
     "@ledgerhq/hw-transport" "^4.41.1"
     u2f-api "0.2.7"
 
-"@ledgerhq/hw-transport-webusb@^4.41.1":
-  version "4.41.1"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-4.41.1.tgz#4152598644822e4ae5a68b4130133b62b1fd22cf"
-  integrity sha512-nVYZRu4dbmlfcmxBOntc8XKYSN+JiXi3c38ZtMkkd5nv3W+lGtJVWsGGdgTNrDO8h7Od+OMp8O6lBjybrWdAzQ==
-  dependencies:
-    "@ledgerhq/devices" "^4.41.1"
-    "@ledgerhq/errors" "^4.41.1"
-    "@ledgerhq/hw-transport" "^4.41.1"
-
 "@ledgerhq/hw-transport@^4.41.1":
   version "4.41.1"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.41.1.tgz#1c5cfa38a87d58bbb9fcc9fa0b4e8763365afeb9"
