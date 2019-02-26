@@ -136,7 +136,7 @@ module.exports = ({setState, getState}) => {
       let message
       if (e.name === 'NetworkError') {
         message = 'failed to fetch data from blockchain explorer'
-      } else if (e.name === 'TransportError') {
+      } else if (e.name === 'TransportError' || e.name === 'TransportStatusError') {
         message = e.message
       }
 
