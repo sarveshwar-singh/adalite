@@ -22,7 +22,16 @@ const LoadByHardwareWalletSection = ({loadWallet}) => {
     h(
       'div',
       undefined,
-      h('div', {class: 'margin-top'}, 'AdaLite supports Trezor model T and Ledger Nano S.'),
+      h(
+        'div',
+        {class: 'margin-top'},
+        'AdaLite supports Trezor model T and Ledger Nano S.',
+        h(
+          'a',
+          {href: 'https://github.com/vacuumlabs/adalite/wiki/Troubleshooting', target: 'blank'},
+          'Trouble connecting?'
+        )
+      ),
       h(
         'div',
         {class: 'centered-row margin-top'},
