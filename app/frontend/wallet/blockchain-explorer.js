@@ -73,7 +73,9 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function getAddressInfos(addresses) {
+    console.log('BBB')
     const hash = hashCode(JSON.stringify(addresses))
+    console.log('AAA')
     const addressInfos = state.addressInfos[hash]
     const maxAddressInfoAge = 15000
 
