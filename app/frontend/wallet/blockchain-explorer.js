@@ -108,8 +108,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function getBalance(addresses) {
-    const utxos = await fetchUnspentTxOutputs(addresses)
-    const balance = utxos.reduce((acc, utxo) => acc + utxo.coins, 0)
+    const balance = (await fetchBulkAddressInfo(addresses)).caBalance.getCoin
     return balance
   }
 
