@@ -108,7 +108,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   }
 
   async function getBalance(addresses) {
-    const balance = (await fetchBulkAddressInfo(addresses)).caBalance.getCoin
+    const balance = (await getAddressInfos(addresses)).caBalance.getCoin
     return balance
   }
 
